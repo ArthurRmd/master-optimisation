@@ -6,7 +6,7 @@ import (
 )
 
 
-func generateArray(numberOfElement int, arrayBinary []string) []bool {
+func generateArray(numberOfElement int, arrayBinary *[]string) []bool {
 
 	var array = make([]bool, numberOfElement)
 
@@ -16,14 +16,12 @@ func generateArray(numberOfElement int, arrayBinary []string) []bool {
 
 		temp := rand.Intn(1024)
 
-		chaine := arrayBinary[temp]
-
+		var chaine = (*arrayBinary)[temp]
 		for j := 0; j < 10; j++ {
 			if chaine[j] == 48 {
 				array[(10*i) + j] = true
 			}
 		}
-
 
 	}
 	return array

@@ -22,14 +22,17 @@ type KnapsackResponse struct {
 	items []bool
 }
 
-func getEval(knapsack Knapsack, binaries []string) KnapsackResponse{
+func getEval(knapsack *Knapsack, binaries *[]string) KnapsackResponse{
 
 	var weight int = 0
 	var profit int = 0
 
-	items := generateArray(knapsack.size, binaries)
+	var size int = knapsack.size
+	var maxWeight int = knapsack.maxWeight
 
-	for i := 0; i < knapsack.size; i++ {
+	items := generateArray(size, binaries)
+
+	for i := 0; i < size; i++ {
 		if items[i] {
 			weight += knapsack.weight[i]
 			profit += knapsack.profit[i]
@@ -40,7 +43,7 @@ func getEval(knapsack Knapsack, binaries []string) KnapsackResponse{
 		var beta int = 0
 		var betaTemp int = 0
 
-		for i := 0; i < knapsack.size ; i++  {
+		for i := 0; i < size ; i++  {
 			betaTemp = knapsack.profit[i] / knapsack.weight[i]
 
 			if betaTemp > beta {
@@ -49,18 +52,18 @@ func getEval(knapsack Knapsack, binaries []string) KnapsackResponse{
 
 		}
 
-		profit = profit - ( beta * (weight - knapsack.maxWeight))
+		profit = profit - ( beta * (weight - maxWeight))
 	}
 
 	return KnapsackResponse{profit: profit, weight: weight, items: items}
 }
 
-func getRandom( numberOfRandom int, knapsack Knapsack, binaries *[]string ) KnapsackResponse {
+func getRandom( numberOfRandom int, knapsack Knapsack, binaries []string ) KnapsackResponse {
 
-	bestKnapsackResponse := getEval(knapsack, *binaries)
+	bestKnapsackResponse := getEval(&knapsack, &binaries)
 
 	for i := 0; i < (numberOfRandom); i++ {
-		temp := getEval(knapsack, *binaries)
+		temp := getEval(&knapsack, &binaries)
 
 		if temp.profit > bestKnapsackResponse.profit {
 			bestKnapsackResponse = temp
