@@ -34,7 +34,6 @@ func getEval(knapsack Knapsack, binaries []string) KnapsackResponse{
 			weight += knapsack.weight[i]
 			profit += knapsack.profit[i]
 		}
-
 	}
 
 	if weight > knapsack.maxWeight {
@@ -60,7 +59,7 @@ func getRandom( numberOfRandom int, knapsack Knapsack, binaries *[]string ) Knap
 
 	bestKnapsackResponse := getEval(knapsack, *binaries)
 
-	for i := 0; i < (numberOfRandom - 1); i++ {
+	for i := 0; i < (numberOfRandom); i++ {
 		temp := getEval(knapsack, *binaries)
 
 		if temp.profit > bestKnapsackResponse.profit {

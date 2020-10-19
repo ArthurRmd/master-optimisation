@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+
 func generateArray(numberOfElement int, arrayBinary []string) []bool {
 
 	var array = make([]bool, numberOfElement)
@@ -31,12 +32,23 @@ func generateArray(numberOfElement int, arrayBinary []string) []bool {
 func generateBinaries() []string  {
 
 	var binaries []string
+	var arrayZero = [11]string {
+		"000000000",
+		"000000000",
+		"00000000",
+		"0000000",
+		"000000",
+		"00000",
+		"0000",
+		"000",
+		"00",
+		"0",
+		"",
+	}
 
 	for i := 0; i < 1024; i++ {
 		temp := strconv.FormatInt(int64(i), 2)
-		for len(temp) < 10 {
-			temp = "0" + temp
-		}
+		temp = arrayZero[len(temp)] + temp
 		binaries = append(binaries, temp)
 	}
 
