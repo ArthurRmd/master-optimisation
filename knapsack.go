@@ -58,12 +58,66 @@ func getEval(knapsack *Knapsack, binaries *[]string) KnapsackResponse{
 	return KnapsackResponse{profit: profit, weight: weight, items: items}
 }
 
+
+func getEvalWithWalk(knapsack *Knapsack) KnapsackResponse{
+
+	var weight int = 0
+	var profit int = 0
+
+	var size int = knapsack.size
+	var maxWeight int = knapsack.maxWeight
+
+	items := generateArrayWalk(size)
+
+	for i := 0; i < size; i++ {
+		if items[i] {
+			weight += knapsack.weight[i]
+			profit += knapsack.profit[i]
+		}
+	}
+
+	if weight > knapsack.maxWeight {
+		var beta int = 0
+		var betaTemp int = 0
+
+		for i := 0; i < size ; i++  {
+			betaTemp = knapsack.profit[i] / knapsack.weight[i]
+
+			if betaTemp > beta {
+				beta = betaTemp
+			}
+
+		}
+
+		profit = profit - ( beta * (weight - maxWeight))
+	}
+
+	return KnapsackResponse{profit: profit, weight: weight, items: items}
+}
+
 func getRandom( numberOfRandom int, knapsack Knapsack, binaries []string ) KnapsackResponse {
 
 	bestKnapsackResponse := getEval(&knapsack, &binaries)
 
 	for i := 0; i < (numberOfRandom); i++ {
 		temp := getEval(&knapsack, &binaries)
+
+		if temp.profit > bestKnapsackResponse.profit {
+			bestKnapsackResponse = temp
+		}
+
+	}
+
+	return bestKnapsackResponse
+
+}
+
+func getRandomWithWalk( numberOfRandom int, knapsack Knapsack) KnapsackResponse {
+
+	bestKnapsackResponse := getEvalWithWalk(&knapsack)
+
+	for i := 0; i < (numberOfRandom); i++ {
+		temp := getEvalWithWalk(&knapsack)
 
 		if temp.profit > bestKnapsackResponse.profit {
 			bestKnapsackResponse = temp
