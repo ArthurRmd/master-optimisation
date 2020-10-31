@@ -75,6 +75,24 @@ func getRandom( numberOfRandom int, knapsack Knapsack, binaries []string ) Knaps
 
 }
 
+func getRandomReference(numberOfRandom int, knapsack Knapsack, binaries []string, response *KnapsackResponse) {
+
+	bestKnapsackResponse := getEval(&knapsack, &binaries)
+
+	for i := 0; i < (numberOfRandom); i++ {
+		temp := getEval(&knapsack, &binaries)
+
+		if temp.profit > bestKnapsackResponse.profit {
+			bestKnapsackResponse = temp
+		}
+
+	}
+
+	*response = bestKnapsackResponse
+
+}
+
+
 func getKnapsackByFile(filename string) Knapsack {
 
 	f, err := os.Open(filename)

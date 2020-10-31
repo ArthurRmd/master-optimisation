@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/buptmiao/parallel"
 	"math/rand"
+	"runtime"
+	"sync"
 	"time"
 )
 
@@ -14,44 +15,33 @@ func main() {
 	rand.Seed(2)
 
 	binaries := generateBinaries()
-	binaries2 := generateBinaries()
-	//binaries3 := generateBinaries()
 
 	var knapsack Knapsack = getKnapsackByFile("data.txt")
-	var knapsack2 Knapsack = getKnapsackByFile("data.txt")
-	//var knapsack3 Knapsack = getKnapsackByFile("data.txt")
-
-	var response1 KnapsackResponse
+	var response KnapsackResponse
 	var response2 KnapsackResponse
-	var response3 KnapsackResponse
 
-	//	response := getRandom(50000, knapsack, binaries)
-	//	response2 := getRandom(50000, knapsack2, binaries2)
+	runtime.GOMAXPROCS(4)
+	var wg sync.WaitGroup
+	wg.Add(2)
 
-	numberPerThread := 350000
-	p := parallel.NewParallel()
-
-	p.Register(getRandom, numberPerThread, knapsack, binaries).SetReceivers(&response1)
-	p.Register(getRandom, numberPerThread, knapsack2, binaries2).SetReceivers(&response2)
-	//p.Register(getRandom, numberPerThread, knapsack3, binaries3).SetReceivers(&response3)
-
-	p.Run()
-
-	bestProfit := 0
-
-	if response1.profit> response2.profit {
-		bestProfit = response1.profit
-	} else {
-		bestProfit = response2.profit
-	}
-
-	if bestProfit < response3.profit {
-		bestProfit = response3.profit
-	}
-
-	fmt.Println(bestProfit)
+	go func() {
+		response = getRandom(50000, knapsack, binaries)
+		wg.Done()
+	}()
 
 
+	go func() {
+		response2 = getRandom(50000, knapsack, binaries)
+		wg.Done()
+	}()
+
+
+
+
+	wg.Wait()
+
+	fmt.Println(response.profit)
+	fmt.Println(response2.profit)
 
 	elapsed := time.Since(start)
 	fmt.Println(elapsed)
