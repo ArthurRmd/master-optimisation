@@ -9,13 +9,25 @@ import (
 func main() {
 
 	start := time.Now()
-	rand.Seed(2)
+	rand.Seed(484558488)
 
-	//tp2(1000000)
+	//tp2(10000000)
 
-	for i := 0; i <  1000000; i++ {
-		generateArrayWalk(1000)
+
+	//bestImprovement(5000)
+
+	var knapsack = getKnapsackByFile("data.txt")
+	var items = generateRandomArrayOfBool(knapsack.size)
+
+	response := bestImprovement(&knapsack,items,200)
+	fmt.Println()
+
 	}
+
+
+
+
+
 	elapsed := time.Since(start)
 	fmt.Println(elapsed)
 

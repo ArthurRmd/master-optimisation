@@ -22,6 +22,39 @@ type KnapsackResponse struct {
 	items []bool
 }
 
+func makeEval(knapsack *Knapsack, items []bool) KnapsackResponse {
+	var weight int = 0
+	var profit int = 0
+
+	var size int = knapsack.size
+	var maxWeight int = knapsack.maxWeight
+
+	for i := 0; i < size; i++ {
+		if items[i] {
+			weight += knapsack.weight[i]
+			profit += knapsack.profit[i]
+		}
+	}
+
+	if weight > knapsack.maxWeight {
+		var beta int = 0
+		var betaTemp int = 0
+
+		for i := 0; i < size ; i++  {
+			betaTemp = knapsack.profit[i] / knapsack.weight[i]
+
+			if betaTemp > beta {
+				beta = betaTemp
+			}
+
+		}
+
+		profit = profit - ( beta * (weight - maxWeight))
+	}
+
+	return KnapsackResponse{profit: profit, weight: weight, items: items}
+}
+
 func getEval(knapsack *Knapsack, binaries *[]string) KnapsackResponse{
 
 	var weight int = 0

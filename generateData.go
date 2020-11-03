@@ -55,35 +55,50 @@ func generateBinaries() []string {
 
 }
 
-func generateArrayWalk( size int ) []bool {
 
-	if len(firstArray) == 0 {
+func generateRandomArrayOfBool(size int) []bool {
 
-		var array = make([]bool, size)
+	var arrayOfBool = make([]bool, size)
 
-		for i := 0; i < size; i++ {
-			temp := rand.Intn(2)
+	for i := 0; i < size; i++ {
+		temp := rand.Intn(2)
 
-			if temp == 1 {
-				array[i] = true
-			}
-
-		}
-
-		firstArray = array
-	} else {
-
-		temp := rand.Intn(size)
-
-		if firstArray[5] == false {
-			firstArray[5] = true
-		} else {
-			firstArray[5] = false
+		if temp == 1 {
+			arrayOfBool[i] = true
 		}
 
 	}
 
-	return firstArray
+	return arrayOfBool
 
+}
+
+func changeBitArrayOfBool( array []bool) []bool {
+
+	temp := rand.Intn(len(array))
+	changeBit(array, temp)
+	return array
+
+}
+
+func changeBit(array []bool,index int) []bool  {
+	var newArray = make([]bool, len(array))
+	copy(newArray, array)
+	newArray[index] = !newArray[index]
+	return newArray
+}
+
+
+func generateArrayWalk( size int ) []bool {
+
+	if len(firstArray) == 0 {
+
+		firstArray = generateRandomArrayOfBool(size)
+
+	} else {
+		changeBitArrayOfBool(firstArray)
+	}
+
+	return firstArray
 
 }
